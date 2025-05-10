@@ -1,11 +1,12 @@
 import { Router } from "express";
 import TicketsController from "../controllers/TicketsController";
 import { celebrate, Joi, Segments } from "celebrate";
+import isAuthenticated from "@shared/http/middlewares/isAuthenticated";
 
 const ticketsRouter = Router();
 const ticketsController = new TicketsController();
 
-ticketsRouter.get("/", async (req, res, next) => {
+ticketsRouter.get("/", isAuthenticated, async (req, res, next) => {
     try {
         await ticketsController.index(req, res, next);
     } catch (err) {
@@ -13,17 +14,17 @@ ticketsRouter.get("/", async (req, res, next) => {
     }
 })
 
-ticketsRouter.get("/user/:user", celebrate({
-    [Segments.PARAMS]: { user: Joi.string().uuid().required() }
+ticketsRouter.get("/client/:client", isAuthenticated, celebrate({
+    [Segments.PARAMS]: { client: Joi.string().uuid().required() }
 }), async (req, res, next) => {
     try {
-        await ticketsController.listUserTickets(req, res, next);
+        await ticketsController.listClientTickets(req, res, next);
     } catch (err) {
         next(err);
     }
 })
 
-ticketsRouter.get("/:id", celebrate({
+ticketsRouter.get("/:id", isAuthenticated, celebrate({
     [Segments.PARAMS]: { id: Joi.string().uuid().required() }
 }), async (req, res, next) => {
     try {
@@ -33,12 +34,12 @@ ticketsRouter.get("/:id", celebrate({
     }
 })
 
-ticketsRouter.post("/", celebrate({
+ticketsRouter.post("/", isAuthenticated, celebrate({
     [Segments.BODY]: {
         film: Joi.string().required(),
         seats: Joi.array().items(Joi.number().integer()).required(),
         session_date: Joi.date().required(),
-        user: Joi.string().uuid().required(),
+        clientId: Joi.string().uuid().required(),
     }
 }), async (req, res, next) => {
     try {
@@ -48,13 +49,13 @@ ticketsRouter.post("/", celebrate({
     }
 })
 
-ticketsRouter.put("/:id", celebrate({
+ticketsRouter.put("/:id", isAuthenticated, celebrate({
     [Segments.PARAMS]: { id: Joi.string().uuid().required() },
     [Segments.BODY]: {
         film: Joi.string().required(),
         seats: Joi.array().items(Joi.number().integer()).required(),
         session_date: Joi.date().required(),
-        user: Joi.string().uuid().required(),
+        clientId: Joi.string().uuid().required(),
     }
 }), async (req, res, next) => {
     try {
@@ -64,7 +65,7 @@ ticketsRouter.put("/:id", celebrate({
     }
 })
 
-ticketsRouter.delete("/:id", async (req, res, next) => {
+ticketsRouter.delete("/:id", isAuthenticated, async (req, res, next) => {
     try {
         await ticketsController.delete(req, res, next);
     } catch (err) {
