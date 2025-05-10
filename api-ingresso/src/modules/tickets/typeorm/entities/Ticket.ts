@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
-import User from "../../../users/typeorm/entities/User";
+import Client from "@modules/clients/typeorm/entities/Client";
 
 
 @Entity("tickets")
@@ -17,11 +17,11 @@ export default class Ticket {
     session_date: Date;
 
     @Column()
-    userId: string;
+    clientId: string;
 
-    @ManyToOne(() => User, user => user.id)
-    @JoinColumn({ name: "userId" })
-    user: string;
+    @ManyToOne(() => Client, client => client.id)
+    @JoinColumn({ name: "clientId" })
+    client: Client;
 
     @CreateDateColumn()
     created_at: Date;

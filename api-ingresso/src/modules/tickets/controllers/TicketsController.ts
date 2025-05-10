@@ -4,7 +4,7 @@ import ShowTicketService from "../services/ShowTicketService";
 import CreateTicketService from "../services/CreateTicketService";
 import UpdateTicketService from "../services/UpdateTicketService";
 import DeleteTicketService from "../services/DeleteTicketService";
-import ListUserTicketService from "../services/ListUserTicketService";
+import ListClientTicketService from "../services/ListClientTicketService";
 
 export default class TicketsController {
 
@@ -18,12 +18,12 @@ export default class TicketsController {
         }
     }
 
-    public async listUserTickets(request: Request, response: Response, next: NextFunction): Promise<Response | void>{
+    public async listClientTickets(request: Request, response: Response, next: NextFunction): Promise<Response | void>{
         try {
-            const {user} = request.params;
-            console.log(user);
-            const listTickets = new ListUserTicketService();
-            const Tickets = await listTickets.execute({user});
+            const {client} = request.params;
+            console.log(client);
+            const listTickets = new ListClientTicketService();
+            const Tickets = await listTickets.execute({client});
             return response.json(Tickets);
         } catch (err) {
             next(err);
@@ -45,10 +45,10 @@ export default class TicketsController {
 
     public async create(request: Request, response: Response, next: NextFunction): Promise<Response | void>{
         try {
-            const {film, seats, session_date, user} = request.body;
+            const {film, seats, session_date, clientId} = request.body;
 
             const createTicket = new CreateTicketService();
-            const Ticket = await createTicket.execute({film, seats, session_date, user});
+            const Ticket = await createTicket.execute({film, seats, session_date, clientId});
 
             return response.json(Ticket);
         } catch (err) {
@@ -59,10 +59,10 @@ export default class TicketsController {
     public async update(request: Request, response: Response, next: NextFunction): Promise<Response | void>{
         try {
             const {id} = request.params;
-            const {film, seats, session_date, user} = request.body;
+            const {film, seats, session_date, clientId} = request.body;
 
             const updateTicket = new UpdateTicketService();
-            const Ticket = await updateTicket.execute({id, film, seats, session_date, user});
+            const Ticket = await updateTicket.execute({id, film, seats, session_date, clientId});
 
             return response.json(Ticket);
         } catch (err) {
