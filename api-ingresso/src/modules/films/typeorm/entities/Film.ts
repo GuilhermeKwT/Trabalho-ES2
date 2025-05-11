@@ -1,27 +1,25 @@
-import Client from "../../../clients/typeorm/entities/Client";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 
 
-@Entity("tickets")
-export default class Ticket {
+@Entity("films")
+export default class Film {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
     @Column()
-    film: string;
+    name: string;
 
     @Column("simple-array")
-    seats: number[];
+    genres: string[];
+
+    @Column("simple-array")
+    directors: string[];
 
     @Column()
-    session_date: Date;
-
+    summary: string;
+        
     @Column()
-    clientId: string;
-
-    @ManyToOne(() => Client, client => client.id)
-    @JoinColumn({ name: "clientId" })
-    client: Client;
+    banner: string;
 
     @CreateDateColumn()
     created_at: Date;
