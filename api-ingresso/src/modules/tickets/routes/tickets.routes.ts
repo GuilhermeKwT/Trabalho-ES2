@@ -14,8 +14,8 @@ ticketsRouter.get("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
-ticketsRouter.get("/client/:client", isAuthenticated, celebrate({
-    [Segments.PARAMS]: { client: Joi.string().uuid().required() }
+ticketsRouter.get("/client/:clientId", isAuthenticated, celebrate({
+    [Segments.PARAMS]: { clientId: Joi.string().uuid().required() }
 }), async (req, res, next) => {
     try {
         await ticketsController.listClientTickets(req, res, next);

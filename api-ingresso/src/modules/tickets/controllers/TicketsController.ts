@@ -20,10 +20,9 @@ export default class TicketsController {
 
     public async listClientTickets(request: Request, response: Response, next: NextFunction): Promise<Response | void>{
         try {
-            const {client} = request.params;
-            console.log(client);
+            const {clientId} = request.params;
             const listTickets = new ListClientTicketService();
-            const Tickets = await listTickets.execute({client});
+            const Tickets = await listTickets.execute({clientId});
             return response.json(Tickets);
         } catch (err) {
             next(err);
