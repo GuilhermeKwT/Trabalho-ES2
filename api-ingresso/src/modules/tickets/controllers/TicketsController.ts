@@ -73,8 +73,8 @@ export default class TicketsController {
         try {
             const {id} = request.params;
 
-            const daleteTicket = new DeleteTicketService();
-            await daleteTicket.execute({id});
+            const deleteTicket = new DeleteTicketService();
+            await deleteTicket.execute({id});
 
             return response.json([]);
         } catch (err) {

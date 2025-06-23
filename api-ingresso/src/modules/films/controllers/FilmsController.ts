@@ -61,8 +61,8 @@ export default class FilmsController {
         try {
             const {id} = request.params;
 
-            const daleteFilm = new DeleteFilmService();
-            await daleteFilm.execute({id});
+            const deleteFilm = new DeleteFilmService();
+            await deleteFilm.execute({id});
 
             return response.json([]);
         } catch (err) {

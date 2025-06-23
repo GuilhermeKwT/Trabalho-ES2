@@ -16,9 +16,6 @@ export default class Ticket {
     @Column()
     session_date: Date;
 
-    @Column()
-    clientId: string;
-
     @ManyToOne(() => Client, client => client.id)
     @JoinColumn({ name: "clientId" })
     client: Client;

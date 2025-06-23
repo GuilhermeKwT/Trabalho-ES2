@@ -10,7 +10,6 @@ export class CreateTickets1746142268579 implements MigrationInterface {
                 { name: "film", type: "varchar" },
                 { name: "seats", type: "varchar"},
                 { name: "session_date", type: "timestamp" },
-                { name: "clientId", type: "uuid" },
                 { name: "created_at", type: "timestamp", default: "now()" },
                 { name: "updated_at", type: "timestamp", default: "now()" },
             ]

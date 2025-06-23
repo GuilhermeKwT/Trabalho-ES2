@@ -61,8 +61,8 @@ export default class ClientsController {
         try {
             const {id} = request.params;
 
-            const daleteClient = new DeleteClientService();
-            await daleteClient.execute({id});
+            const deleteClient = new DeleteClientService();
+            await deleteClient.execute({id});
 
             return response.json([]);
         } catch (err) {
