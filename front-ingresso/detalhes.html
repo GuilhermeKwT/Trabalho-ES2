@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Filme</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/detalhes.css">
+</head>
+<body>
+  <header>
+    <div class="logo">CINE XV</div>
+    <nav>
+      <a href="#">TRAILERS</a>
+      <a href="#">NOTÍCIAS</a>
+      <a href="#">PROGRAMAÇÃO</a>
+      <a href="#">MINHA CONTA</a>
+    </nav>
+    <div class="search">
+      <input type="text" placeholder="Procurar filme">
+    </div>
+  </header>
+
+  <div class="container" id="filme-detalhes">
+    <!-- Conteúdo preenchido dinamicamente -->
+  </div>
+
+  <script>
+    async function carregarDetalhesFilme() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const filmeId = urlParams.get('id');
+      if (!filmeId) {
+        document.getElementById('filme-detalhes').innerHTML = '<p>Filme não encontrado.</p>';
+        return;
+      }
+
+      try {
+        const resposta = await fetch(`http://localhost:3333/films/${filmeId}`);
+        if (!resposta.ok) throw new Error('Erro ao buscar o filme');
+
+        const filme = await resposta.json();
+
+        const container = document.getElementById('filme-detalhes');
+        container.innerHTML = `
+          <img class="poster" src="${filme.banner || 'https://placehold.co/300x450'}" alt="${filme.name}">
+          <div class="info">
+            <h1>${filme.name}</h1>
+            <p><strong>Direção:</strong> ${filme.directors.join(', ')}</p>
+            <p><strong>Gênero:</strong> ${filme.genres.join(', ')}</p>
+            <div class="sessoes">
+              <h3>LOCAL: <span style="color: yellow">GUARAPUAVA</span></h3>
+              <div class="sessao" onclick="window.location.href='sessao.html?sessao=1'">
+                <span>QUI, 26 JUN, 19H40</span> <span>DUBLADO</span>
+              </div>
+              <div class="sessao" onclick="window.location.href='sessao.html?sessao=2'">
+                <span>QUI, 26 JUN, 19H40</span> <span>LEGENDADO</span>
+              </div>
+              <div class="sessao" onclick="window.location.href='sessao.html?sessao=3'">
+                <span>SEX, 27 JUN, 14H10</span> <span>LEGENDADO</span>
+              </div>
+              <div class="salas">
+                <div class="sala active">SALA 01</div>
+                <div class="sala">SALA 02</div>
+                <div class="sala">SALA 03</div>
+                <div class="sala">SALA 04</div>
+              </div>
+            </div>
+            <div class="sinopse">
+              <h2>SINOPSE</h2>
+              <p>${filme.summary}</p>
+            </div>
+          </div>
+        `;
+      } catch (erro) {
+        console.error('Erro:', erro);
+        document.getElementById('filme-detalhes').innerHTML = '<p>Erro ao carregar detalhes do filme.</p>';
+      }
+    }
+
+    carregarDetalhesFilme();
+  </script>
+</body>
+</html>

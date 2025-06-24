@@ -5,8 +5,9 @@ import FilmsController from "../controllers/FilmsController";
 
 const filmsRouter = Router();
 const filmsController = new FilmsController();
+//filmsRouter.use(isAuthenticated);
 
-filmsRouter.get("/", isAuthenticated, async (req, res, next) => {
+filmsRouter.get("/", async (req, res, next) => {
     try {
         await filmsController.index(req, res, next);
     } catch (err) {
@@ -14,7 +15,7 @@ filmsRouter.get("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
-filmsRouter.get("/:id", isAuthenticated, celebrate({
+filmsRouter.get("/:id", celebrate({
     [Segments.PARAMS]: { id: Joi.string().uuid().required() }
 }), async (req, res, next) => {
     try {
@@ -24,7 +25,7 @@ filmsRouter.get("/:id", isAuthenticated, celebrate({
     }
 })
 
-filmsRouter.post("/", isAuthenticated, celebrate({
+filmsRouter.post("/", celebrate({
     [Segments.BODY]: {
         name: Joi.string().required(),
         genres: Joi.array().items(Joi.string()).required(),
@@ -41,7 +42,7 @@ filmsRouter.post("/", isAuthenticated, celebrate({
     }
 })
 
-filmsRouter.put("/:id", isAuthenticated, celebrate({
+filmsRouter.put("/:id", celebrate({
     [Segments.PARAMS]: { id: Joi.string().uuid().required() },
     [Segments.BODY]: {
         name: Joi.string().required(),
@@ -59,7 +60,7 @@ filmsRouter.put("/:id", isAuthenticated, celebrate({
     }
 })
 
-filmsRouter.delete("/:id", isAuthenticated, async (req, res, next) => {
+filmsRouter.delete("/:id", async (req, res, next) => {
     try {
         await filmsController.delete(req, res, next);
     } catch (err) {
