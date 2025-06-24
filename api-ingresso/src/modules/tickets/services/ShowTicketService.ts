@@ -11,7 +11,7 @@ export default class ShowTicketService {
     public async execute ({id}: IRequest): Promise<Ticket> {
         const ticketsRepository = getCustomRepository(TicketRepository)
 
-        const ticket = await ticketsRepository.findOne(id);
+        const ticket = await ticketsRepository.findById(id);
         if(!ticket){
             throw new AppError("Ticket not found.")
         }

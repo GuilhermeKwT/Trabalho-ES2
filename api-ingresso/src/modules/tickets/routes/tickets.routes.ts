@@ -14,8 +14,8 @@ ticketsRouter.get("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
-ticketsRouter.get("/client/:client", isAuthenticated, celebrate({
-    [Segments.PARAMS]: { client: Joi.string().uuid().required() }
+ticketsRouter.get("/client/:clientId", isAuthenticated, celebrate({
+    [Segments.PARAMS]: { clientId: Joi.string().uuid().required() }
 }), async (req, res, next) => {
     try {
         await ticketsController.listClientTickets(req, res, next);
@@ -36,9 +36,9 @@ ticketsRouter.get("/:id", isAuthenticated, celebrate({
 
 ticketsRouter.post("/", isAuthenticated, celebrate({
     [Segments.BODY]: {
-        film: Joi.string().required(),
         seats: Joi.array().items(Joi.number().integer()).required(),
         session_date: Joi.date().required(),
+        filmId: Joi.string().uuid().required(),
         clientId: Joi.string().uuid().required(),
     }
 }), async (req, res, next) => {
@@ -52,9 +52,9 @@ ticketsRouter.post("/", isAuthenticated, celebrate({
 ticketsRouter.put("/:id", isAuthenticated, celebrate({
     [Segments.PARAMS]: { id: Joi.string().uuid().required() },
     [Segments.BODY]: {
-        film: Joi.string().required(),
         seats: Joi.array().items(Joi.number().integer()).required(),
         session_date: Joi.date().required(),
+        filmId: Joi.string().uuid().required(),
         clientId: Joi.string().uuid().required(),
     }
 }), async (req, res, next) => {
