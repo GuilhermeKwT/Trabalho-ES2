@@ -1,0 +1,60 @@
+body {
+      text-align: center;
+    }
+    .assentos {
+      display: grid;
+      grid-template-columns: repeat(14, 35px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .assento {
+      width: 30px;
+      height: 30px;
+      background-color: #fff;
+      border: 2px solid #ffd700;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .assento.reservado {
+      background-color: #444;
+      cursor: not-allowed;
+    }
+    .assento.selecionado {
+      background-color: #ffd700;
+    }
+    .info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+    .legenda {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .quadrado {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+    }
+    .confirmar-btn {
+      margin-top: 20px;
+      background-color: #ffd700;
+      color: #000;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .tela {
+      background-color: #888;
+      width: 60%;
+      border-radius: 5px;
+      margin: 20px auto;
+    }
+    .filme-info {
+      color: white;
+      margin-top: 30px;
+    }
