@@ -4,12 +4,14 @@ import sessionsRouter from "@modules/users/routes/sessions.routes";
 import { Router } from "express";
 import clientsRouter from "@modules/clients/routes/client.routes";
 import filmsRouter from "@modules/films/routes/film.routes";
+import sessionsRouters from "@modules/sessions/routes/session.routes";
 
 const routes = Router();
 routes.use("/users", usersRouter);
 routes.use("/tickets", ticketsRouter);
 routes.use('/sessions', sessionsRouter);
 routes.use("/clients", clientsRouter);
-routes.use("/films", filmsRouter)
+routes.use("/films", filmsRouter);
+routes.use("/session", sessionsRouters);
 
 export default routes;

@@ -5,8 +5,9 @@ import isAuthenticated from "@shared/http/middlewares/isAuthenticated";
 
 const ticketsRouter = Router();
 const ticketsController = new TicketsController();
+//ticketsRouter.use(isAuthenticated);
 
-ticketsRouter.get("/", isAuthenticated, async (req, res, next) => {
+ticketsRouter.get("/", async (req, res, next) => {
     try {
         await ticketsController.index(req, res, next);
     } catch (err) {
@@ -14,7 +15,7 @@ ticketsRouter.get("/", isAuthenticated, async (req, res, next) => {
     }
 })
 
-ticketsRouter.get("/client/:clientId", isAuthenticated, celebrate({
+ticketsRouter.get("/client/:clientId", celebrate({
     [Segments.PARAMS]: { clientId: Joi.string().uuid().required() }
 }), async (req, res, next) => {
     try {
@@ -24,7 +25,7 @@ ticketsRouter.get("/client/:clientId", isAuthenticated, celebrate({
     }
 })
 
-ticketsRouter.get("/:id", isAuthenticated, celebrate({
+ticketsRouter.get("/:id", celebrate({
     [Segments.PARAMS]: { id: Joi.string().uuid().required() }
 }), async (req, res, next) => {
     try {
@@ -34,10 +35,10 @@ ticketsRouter.get("/:id", isAuthenticated, celebrate({
     }
 })
 
-ticketsRouter.post("/", isAuthenticated, celebrate({
+ticketsRouter.post("/", celebrate({
     [Segments.BODY]: {
-        seats: Joi.array().items(Joi.number().integer()).required(),
-        session_date: Joi.date().required(),
+        seats: Joi.array().items(Joi.string()).required(),
+        sessionId: Joi.string().uuid().required(),
         filmId: Joi.string().uuid().required(),
         clientId: Joi.string().uuid().required(),
     }
@@ -49,11 +50,11 @@ ticketsRouter.post("/", isAuthenticated, celebrate({
     }
 })
 
-ticketsRouter.put("/:id", isAuthenticated, celebrate({
+ticketsRouter.put("/:id", celebrate({
     [Segments.PARAMS]: { id: Joi.string().uuid().required() },
     [Segments.BODY]: {
-        seats: Joi.array().items(Joi.number().integer()).required(),
-        session_date: Joi.date().required(),
+        seats: Joi.array().items(Joi.string()).required(),
+        sessionId: Joi.string().uuid().required(),
         filmId: Joi.string().uuid().required(),
         clientId: Joi.string().uuid().required(),
     }
@@ -65,7 +66,7 @@ ticketsRouter.put("/:id", isAuthenticated, celebrate({
     }
 })
 
-ticketsRouter.delete("/:id", isAuthenticated, async (req, res, next) => {
+ticketsRouter.delete("/:id", async (req, res, next) => {
     try {
         await ticketsController.delete(req, res, next);
     } catch (err) {

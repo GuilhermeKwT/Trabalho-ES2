@@ -1,20 +1,20 @@
 import {MigrationInterface, QueryRunner, TableColumn, TableForeignKey} from "typeorm";
 
-export class AddFilmIdToTicket1750722767364 implements MigrationInterface {
+export class AddSessionIdToTickets1750806975618 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.addColumn('tickets', 
             new TableColumn({
-                name: 'filmId',
+                name: 'sessionId',
                 type: 'uuid',
                 isNullable: true
             })
         )
         await queryRunner.createForeignKey('tickets',
             new TableForeignKey({
-                name: 'FilmTicket',
-                columnNames: ['filmId'],
-                referencedTableName: 'films',
+                name: 'SessionTicket',
+                columnNames: ['sessionId'],
+                referencedTableName: 'sessions',
                 referencedColumnNames: ['id'],
                 onDelete: 'SET NULL'
             })
@@ -22,8 +22,8 @@ export class AddFilmIdToTicket1750722767364 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('tickets', 'FilmTicket');
-        await queryRunner.dropColumn('tickets', 'filmId');
+        await queryRunner.dropForeignKey('tickets', 'SessionTicket');
+        await queryRunner.dropColumn('tickets', 'sessionId');
     }
 
 }

@@ -44,10 +44,10 @@ export default class TicketsController {
 
     public async create(request: Request, response: Response, next: NextFunction): Promise<Response | void>{
         try {
-            const {seats, session_date, filmId, clientId} = request.body;
+            const {seats, sessionId, filmId, clientId} = request.body;
 
             const createTicket = new CreateTicketService();
-            const Ticket = await createTicket.execute({seats, session_date, clientId, filmId});
+            const Ticket = await createTicket.execute({seats, sessionId, clientId, filmId});
 
             return response.json(Ticket);
         } catch (err) {
@@ -58,10 +58,10 @@ export default class TicketsController {
     public async update(request: Request, response: Response, next: NextFunction): Promise<Response | void>{
         try {
             const {id} = request.params;
-            const {seats, session_date, filmId, clientId} = request.body;
+            const {seats, sessionId, filmId, clientId} = request.body;
 
             const updateTicket = new UpdateTicketService();
-            const Ticket = await updateTicket.execute({id, seats, session_date, filmId, clientId});
+            const Ticket = await updateTicket.execute({id, seats, sessionId, filmId, clientId});
 
             return response.json(Ticket);
         } catch (err) {

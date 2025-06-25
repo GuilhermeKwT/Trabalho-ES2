@@ -8,7 +8,6 @@ export class CreateTickets1746142268579 implements MigrationInterface {
             columns: [
                 {name: "id", type: "uuid", isPrimary: true, generationStrategy: "uuid", default: "uuid_generate_v4()"},
                 { name: "seats", type: "varchar"},
-                { name: "session_date", type: "timestamp" },
                 { name: "created_at", type: "timestamp", default: "now()" },
                 { name: "updated_at", type: "timestamp", default: "now()" },
             ]

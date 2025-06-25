@@ -33,11 +33,14 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction): Respons
     })
 })
 
+/*
 const httpsServer = https.createServer({
     key: fs.readFileSync(path.resolve(__dirname, '../certs/key.pem')),
     cert: fs.readFileSync(path.resolve(__dirname, '../certs/cert.pem'))
 }, app);
+*/
 
-httpsServer.listen(3333, () => {
+// httpsServer.listen(3333, () => {
+app.listen(3333, () => {
     console.log("Server started on port 3333");
 })

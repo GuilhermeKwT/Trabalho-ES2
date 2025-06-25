@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escolha de Assentos</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #ffd700;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .assentos {
+      display: grid;
+      grid-template-columns: repeat(14, 35px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .assento {
+      width: 30px;
+      height: 30px;
+      background-color: #fff;
+      border: 2px solid #ffd700;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .assento.reservado {
+      background-color: #444;
+      cursor: not-allowed;
+    }
+    .assento.selecionado {
+      background-color: #ffd700;
+    }
+    .info {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+    .legenda {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .quadrado {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+    }
+    .confirmar-btn {
+      margin-top: 20px;
+      background-color: #ffd700;
+      color: #000;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .tela {
+      background-color: #888;
+      width: 60%;
+      border-radius: 5px;
+      margin: 20px auto;
+    }
+    .filme-info {
+      color: white;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ESCOLHA DE ASSENTOS</h1>
+
+  <div class="info">
+    <div class="legenda"><div class="quadrado" style="background:#444;"></div> Reservado</div>
+    <div class="legenda"><div class="quadrado" style="background:#fff;"></div> Livre</div>
+    <div class="legenda"><div class="quadrado" style="background:#ffd700;"></div> Selecionado</div>
+  </div>
+
+  <div class="assentos" id="grade-assentos"></div>
+
+  <div class="tela">tela</div>
+
+  <button class="confirmar-btn" onclick="confirmarAssentos()">Confirmar Compra</button>
+
+  <div class="filme-info" id="filme-info">
+    <!-- Info do filme e sessão -->
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const filmeId = urlParams.get('id');
+    const sessaoId = urlParams.get('sessao');
+    console.log(filmeId );
+    const linhas = 'ABCDEFGHIJKL'.split('');
+    const colunas = 14;
+    const assentosSelecionados = [];
+    const assentosReservados = ['A1','A2','A3','A4','A5','B1','B2','B3','B4','B5','C1','C2','C3','C4','C5','L6','L7'];
+
+    function criarAssentos() {
+      const container = document.getElementById('grade-assentos');
+      linhas.forEach(linha => {
+        for (let i = 1; i <= colunas; i++) {
+          const id = `${linha}${i}`;
+          const btn = document.createElement('div');
+          btn.classList.add('assento');
+          btn.id = id;
+          if (assentosReservados.includes(id)) {
+            btn.classList.add('reservado');
+          } else {
+            btn.addEventListener('click', () => toggleAssento(id));
+          }
+          container.appendChild(btn);
+        }
+      });
+    }
+
+    function toggleAssento(id) {
+      const index = assentosSelecionados.indexOf(id);
+      const assento = document.getElementById(id);
+      if (index === -1) {
+        assentosSelecionados.push(id);
+        assento.classList.add('selecionado');
+      } else {
+        assentosSelecionados.splice(index, 1);
+        assento.classList.remove('selecionado');
+      }
+    }
+
+    async function confirmarAssentos() {
+      const ticket = {
+        "seats": assentosSelecionados,
+        "sessionId": `${sessaoId}`,
+        "filmId": `${filmeId}`,
+        "clientId": "5dd6efc6-7505-4c0d-990a-de1bbc5aad97"
+      };
+      console.log(ticket)
+      await fetch("http://localhost:3333/tickets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(ticket)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erro ao confirmar a compra");
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert("Compra confirmada!");
+      })
+      .catch(error => {
+        console.error("Erro:", error);
+      });
+    }
+
+    (async () => {
+      const resposta = await fetch(`http://localhost:3333/films/${filmeId}`);
+      if (!resposta.ok) throw new Error('Erro ao buscar o filme');
+      const filme = await resposta.json();
+      document.getElementById('filme-info').innerHTML = `
+      <p><strong>Como treinar seu Dragão (2025)</strong></p>
+      <p>Ação, aventura, fantasia</p>
+      <p>SALA 5 - Legendado</p>
+      <p>Guarapuava - PR</p>
+      <p><strong>23 Junho - 22:15</strong></p>
+    `;
+    })() 
+    
+
+    criarAssentos();
+  </script>
+</body>
+</html>
