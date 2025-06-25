@@ -7,7 +7,7 @@ import Film from "@modules/films/typeorm/entities/Film";
 export default class TicketRepository extends Repository<Ticket> {
 
     async findById(id: string): Promise<Ticket | undefined> {
-        const film = await this.findOne({ where: { id }, relations: ["film", "client"] });
+        const film = await this.findOne({ where: { id }, relations: ["film", "client", "session"] });
         return film;
     }
 

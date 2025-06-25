@@ -4,17 +4,18 @@ import TicketRepository from "../typeorm/repositories/TicketRepository";
 import AppError from "@shared/errors/AppError";
 import ClientRepository from "@modules/clients/typeorm/repositories/ClientRepository";
 import FilmRepository from "@modules/films/typeorm/repositories/FilmRepository";
+import SessionRepository from "@modules/sessions/typeorm/repositories/SessionRepository";
 
 interface IRequest {
     id: string;
-    seats: number[];
-    session_date: Date;
+    seats: string[];
+    sessionId: string;
     filmId: string;
     clientId: string;
 }
 
 export default class UpdateTicketService {
-    public async execute ({id, seats, session_date, filmId, clientId}: IRequest): Promise<Ticket> {
+    public async execute ({id, seats, sessionId, filmId, clientId}: IRequest): Promise<Ticket> {
         const ticketsRepository = getCustomRepository(TicketRepository)
         const clientRepository = getCustomRepository(ClientRepository);
         const ticket = await ticketsRepository.findOne(id);
@@ -31,13 +32,18 @@ export default class UpdateTicketService {
         if(!film)
             throw new AppError("Film not found.");
 
+        const sessionRepository = getCustomRepository(SessionRepository);
+        const session = await sessionRepository.findById(sessionId);
+        if(!session)
+            throw new AppError("Session not found.");
+        /*
         const ticketExits = await ticketsRepository.findByClientAndFilm(client, film);
         if(ticketExits && ticketExits.id !== id)
             throw new AppError("There is already one ticket with this film for this client.");
-
+        */
         ticket.film = film;
         ticket.seats = seats;
-        ticket.session_date = session_date;
+        ticket.session = session;
         ticket.client = client;
         await ticketsRepository.save(ticket);
 

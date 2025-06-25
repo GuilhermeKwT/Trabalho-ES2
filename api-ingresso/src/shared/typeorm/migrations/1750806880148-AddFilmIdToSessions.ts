@@ -1,16 +1,16 @@
 import {MigrationInterface, QueryRunner, TableColumn, TableForeignKey} from "typeorm";
 
-export class AddFilmIdToTicket1750722767364 implements MigrationInterface {
+export class AddFilmIdToSessions1750806880148 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.addColumn('tickets', 
+        await queryRunner.addColumn('sessions', 
             new TableColumn({
                 name: 'filmId',
                 type: 'uuid',
                 isNullable: true
             })
         )
-        await queryRunner.createForeignKey('tickets',
+        await queryRunner.createForeignKey('sessions',
             new TableForeignKey({
                 name: 'FilmTicket',
                 columnNames: ['filmId'],
@@ -22,8 +22,8 @@ export class AddFilmIdToTicket1750722767364 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropForeignKey('tickets', 'FilmTicket');
-        await queryRunner.dropColumn('tickets', 'filmId');
+        await queryRunner.dropForeignKey('sessions', 'FilmSession');
+        await queryRunner.dropColumn('sessions', 'filmId');
     }
 
 }

@@ -4,16 +4,17 @@ import TicketRepository from "../typeorm/repositories/TicketRepository";
 import AppError from "@shared/errors/AppError";
 import ClientRepository from "@modules/clients/typeorm/repositories/ClientRepository";
 import FilmRepository from "@modules/films/typeorm/repositories/FilmRepository";
+import SessionRepository from "@modules/sessions/typeorm/repositories/SessionRepository";
 
 interface IRequest {
-    seats: number[];
-    session_date: Date;
+    seats: string[];
+    sessionId: string;
     filmId: string;
     clientId: string;
 }
 
 export default class CreateTicketService {
-    public async execute ({seats, session_date, filmId, clientId}: IRequest): Promise<Ticket> {
+    public async execute ({seats, sessionId, filmId, clientId}: IRequest): Promise<Ticket> {
         const ticketsRepository = getCustomRepository(TicketRepository)
         const clientRepository = getCustomRepository(ClientRepository);
         const client = await clientRepository.findById(clientId);
@@ -24,13 +25,17 @@ export default class CreateTicketService {
         const film = await filmRepository.findById(filmId);
         if(!film)
             throw new AppError("Film not found.");
-        const ticketExists = await ticketsRepository.findByClientAndFilm(client, film);
 
-        
+        const sessionRepository = getCustomRepository(SessionRepository);
+        const session = await sessionRepository.findById(sessionId);
+        if(!session)
+            throw new AppError("Session not found.");
+        /*
+        const ticketExists = await ticketsRepository.findByClientAndFilm(client, film);
         if(ticketExists)
             throw new AppError("There is already one ticket with this film for this client.");
-
-        const newTicket = ticketsRepository.create({seats, session_date, film, client});
+        */
+        const newTicket = ticketsRepository.create({seats, session, film, client});
         await ticketsRepository.save(newTicket);
         return newTicket;
     }

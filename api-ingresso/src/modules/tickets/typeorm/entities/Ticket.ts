@@ -1,6 +1,8 @@
 import Film from "../../../films/typeorm/entities/Film";
 import Client from "../../../clients/typeorm/entities/Client";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import Session from "../../../sessions/typeorm/entities/Session";
+
 
 
 @Entity("tickets")
@@ -9,10 +11,11 @@ export default class Ticket {
     id: string;
 
     @Column("simple-array")
-    seats: number[];
+    seats: string[];
 
-    @Column()
-    session_date: Date;
+    @ManyToOne(() => Session, session => session.id)
+    @JoinColumn({ name: "sessionId" })
+    session: Session;
 
     @ManyToOne(() => Film, film => film.id)
     @JoinColumn({ name: "filmId" })
@@ -21,7 +24,7 @@ export default class Ticket {
     @ManyToOne(() => Client, client => client.id)
     @JoinColumn({ name: "clientId" })
     client: Client;
-
+    
     @CreateDateColumn()
     created_at: Date;
 
